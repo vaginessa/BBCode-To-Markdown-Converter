@@ -7,7 +7,6 @@
 			SMF BBCode -> GitHub Markdown converter
 		</title>
 		<link rel="stylesheet" type="text/css" href="reset-min.css">
-		<script type="text/javascript" src="index.js"></script>
 		<link rel="stylesheet" type="text/css" href="styles.css">
 
 	</head>
@@ -23,7 +22,7 @@
 				<tr>
 					<td>
 						<div class="ta_container">
-							<textarea id="left_ta" value="" onChange="convert()" onKeyUp="convert()"></textarea>
+							<textarea class="linked" id="left_ta" value="" onChange="convert()" onKeyUp="convert()"></textarea>
 						</div>
 					</td>
 					<td class="middle_td">
@@ -31,11 +30,13 @@
 					</td>
 					<td>
 						<div class="ta_container">
-							<textarea id="right_ta"></textarea>
+							<textarea class="linked" id="right_ta" readonly onClick="convert()"></textarea>
 						</div>
 					</td>
 				</tr>
 			</table>
 		</div>
+		<script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="index.js"></script>
 	</body>
 </html>
