@@ -270,11 +270,15 @@ Markdown
 [move]This is moving text[/move] --> <marquee></marguee> (this elem is deprecated)
 ```
 
+#### TESTS:
+* Jasmine Standalone tests included:
+just run **tests.html** in browser (not working on github pages, you need to clone the repo)
+
 #### TODO:
 - [X] Able to turn on HTML output for special tags unsupported by markdown
   - [X] tables (for now)
   - [X] old SMF tags (sup, sub, tt, pre, left, center, right, font, color, glow, shadow, move)
-- [ ] Add tests (Mocha or Jasmine)
+- [X] Add tests (Jasmine)(More tests to add)
 - [ ] Support for specific BBCode for other major forums [toggleable]
   - [ ] phpBB
   - [ ] MyBB

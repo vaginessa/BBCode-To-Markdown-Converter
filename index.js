@@ -35,7 +35,7 @@ $(document).ready(function(){
 
 });
 
-function get_shadow_px(direction){
+function getShadowPx(direction){
   switch (direction) {
     case 'right':
         return '2px 0 1px'
@@ -54,16 +54,27 @@ function get_shadow_px(direction){
   }
 }
 
-function convert() {
-  var left = document.getElementById('left_ta');
-  var right = document.getElementById('right_ta');
-  var html_check = document.getElementById('html_check').checked;
+function convert(){
+  var left = document.getElementById('left_ta'); // assign BBCode textarea
+  var right = document.getElementById('right_ta'); // assign Markdown textarea
+  var html_check = document.getElementById('html_check').checked; // get HTML status
 
-  var left_value = left.value;
+  var left_value = left.value; // get the value of BBCode textarea
+
+  right.value = doConversion(left_value, html_check); // do actual conversion
+}
+
+function doConversion(text, html_check) {
+  if(typeof(text) !== "string") {
+    throw new Error("I need text to be a string and not a " + typeof(text));
+  }
+  if(typeof(html_check) !== "boolean") {
+    throw new Error("I need html_check to be a boolean and not a " + typeof(html_check));
+  }
 
   // preprocess some nested issues (bold inside h1 element)
   // fixes for code where text is right after [code] - this is not allowed in Markdown
-  left_value = left_value
+  text = text
     // remove bold tag if nested in size 36 element which translates to H1
     .replace(/\[size=(.+?)\].*\[b\]((?:.|\n)+?)\[\/b\].*\[\/size\]/gmi, '[size=$1]$2[/size]')
     // put text to new line if directly after [code] and is not inline
@@ -78,7 +89,7 @@ function convert() {
     .replace(/^(.(?!code\]).+?)\[\/code\]$/gmi, '$1\n[/code]')
 
   // SMF (Simple Machines Forum) BBcode
-  left_value = left_value
+  text = text
     //bold; replace [b] $1 [/b] with ** $1 **
     .replace(/\[b\]((?:.|\n)+?)\[\/b\]/gmi, '**$1**')
     //underline to italic; replace [u] $1 [/u] with * $1 *
@@ -102,11 +113,11 @@ function convert() {
     //img; replace [img] $link [/url] with ![]($link)
     .replace(/\[img\]((?:.|\n)+?)\[\/img\]/gmi,'![]($1)')
     //url; replace [url=$link] $text [/url] with [$text]($link)
-    .replace(/\[url=(.+?)\]((?:.|\n)+?)\[\/url\]/gmi,'[$2]($1)')
+    .replace(/\[url\]((?:.|\n)+?)\[\/url\]/gmi,'[$1]($1)')
     //email; replace [email] $text [/email] with [$text](mailto:$text)
     .replace(/\[email\]((?:.|\n)+?)\[\/email\]/gmi,'[$1](mailto:$1)')
     //ftp; replace [ftp] $text [/ftp] with [$text](ftp://$text)
-    .replace(/\[ftp\]((?:.|\n)+?)\[\/ftp\]/gmi,'[FTP: $1](ftp://$1)')
+    .replace(/\[ftp\]((?:.|\n)+?)\[\/ftp\]/gmi,'[$1](ftp://$1)')
     //inline code; replace [code] $text [/code] with `$text`
     .replace(/\[quote\](.*?)\[\/quote\]/gmi, '> $1')
     //quote; remove [quote][/quote] convert it's elements
@@ -141,7 +152,7 @@ function convert() {
 
   // ONLY IF HTML IS TURNED ON
   if (html_check) {
-    left_value = left_value
+    text = text
     //table; replace [table] $text [/table] with html <table>$text</table>
     .replace(/\[table\]((?:.|\n)+?)\[\/table\]/gmi, '<table>$1</table>')
     //tr; replace [tr] $text [/tr] with html <tr>$text</tr>
@@ -174,7 +185,7 @@ function convert() {
     //shadow; replace [shadow=$color,$direction] $text [/shadow] with html <span style="text-shadow: $color # # #">$text</span>
     .replace(/\[shadow\=(.+?),(.+?)\]((?:.|\n)+?)\[\/shadow\]/gmi,
         function(match, p1, p2, p3, offset, string){
-          return '<span style="text-shadow: ' + p1 + ' ' + get_shadow_px(p2) + '"> '+ p3 +'</span>';
+          return '<span style="text-shadow: ' + p1 + ' ' + getShadowPx(p2) + '"> '+ p3 +'</span>';
     })
     //move; replace [move] $text [/move] with html <marquee>$text</marquee> (BEWARE this tag is deprecated)
     .replace(/\[move\]((?:.|\n)+?)\[\/move\]/gmi, '<marquee>$1</marquee>')
@@ -186,7 +197,7 @@ function convert() {
 
   // ONLY IF HTML IS TURNED OFF
   if (!html_check) {
-    left_value = left_value
+    text = text
       //remove [color] tags
       .replace(/\[color\=.+?\]((?:.|\n)+?)\[\/color\]/gmi, '$1')
       //MORE OBSCURE TAGS
@@ -220,5 +231,5 @@ function convert() {
       .replace();
   }
 
-  right.value = left_value;
+  return text
 }
