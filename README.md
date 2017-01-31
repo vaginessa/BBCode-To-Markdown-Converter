@@ -91,11 +91,11 @@ Markdown
 ##### Inline Code
 BBCode:
 ```
-[code]inline_code();[/code]
+This is [code]inline_code();[/code]
 ```
 Markdown
 
-    `inline_code();`
+    This is `inline_code();`
 
 ##### Multiline Code block with autodiscovery highlight
 
@@ -158,7 +158,7 @@ text
 text
 [/code]
 
-[code=lang]text      //not meant to be inline
+[code=lang]text[/code]        //not meant to be inline
 ---->
 [code=lang]
 text
@@ -272,7 +272,7 @@ Markdown
 
 #### TESTS:
 * Jasmine Standalone tests included:
-just run **tests.html** in browser (not working on github pages, you need to clone the repo)
+just point your browser to **tests.html**
 
 #### TODO:
 - [X] Able to turn on HTML output for special tags unsupported by markdown
